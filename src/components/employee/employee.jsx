@@ -148,74 +148,324 @@
 
 // export default App;
 
+// await axios
+// 	.get("http://localhost:2000/api/issues")
+// 	.then((res) => {
+// 		return setIssues(res.data);
+// 	})
+// 	.catch((e) => console.log(e));
+
+// const issuesData = [
+// 	{
+// 		issueId: "1",
+// 		issueName: "Delivery",
+// 		issueDesc: "Got wrong item",
+// 		connectedTo: "1234",
+// 		status: "123",
+// 	},
+// 	{
+// 		issueId: "2",
+// 		issueName: "Payment",
+// 		issueDesc: "Payment failed",
+// 		connectedTo: "1254",
+// 		status: "124",
+// 	},
+// ];
+
+// import { useEffect, useState } from "react";
+// // import "./App.css";
+// import EmpNavbar from "./emp_navbar";
+// import EmpIssues from "./issues";
+
+// const Employee = () => {
+// 	// const [issues, setIssues] = useState([]);
+// 	const [currentEmpIssues, setCurrentEmpIssues] = useState([]);
+// 	const [solvedIssues, setSolvedIssues] = useState([]);
+// 	const [unsolvedIssues, setUnsolvedIssues] = useState([]);
+// 	const [tempIssues, setTempIssues] = useState([]);
+// 	const [status, setStatus] = useState([]);
+// 	const [empId, setEmpId] = useState("100");
+// 	setEmpId(localStorage.getItem("empId"));
+// 	useEffect(() => {
+// 		const fetchData = async () => {
+// 			let statusData = [];
+// 			let currentIssueData = [];
+
+// 			// await axios
+// 			// 	.get("http://localhost:2000/api/status")
+// 			// 	.then((res) => {
+// 			// 		return setStatus(res.data);
+// 			// 	})
+// 			// .catch((e) => console.log(e));
+// 			// await axios
+// 			// 	.get("http://localhost:2000/api/issues/employee/${empId}")
+// 			// 	.then((res) => {
+// 			// 		currentIssueData = res.data;
+// 			// 	});
+// 			setCurrentEmpIssues(currentIssueData);
+
+// 			statusData = [
+// 				{
+// 					statusId: "123",
+// 					status: "closed",
+// 					issueId: "1",
+// 					statusDescription: "It may take 2 days",
+// 				},
+// 				{
+// 					statusId: "124",
+// 					status: "open",
+// 					issueId: "2",
+// 					statusDescription: "It may take 5 days",
+// 				},
+// 			];
+
+// 			// setIssues(issuesData);
+// 			setStatus(statusData);
+// 			// issuesData
+// 			const solvedIssuesData = currentEmpIssues.filter((issue) =>
+// 				statusData.some(
+// 					(status) =>
+// 						status.issueId === issue.issueId && status.status === "closed"
+// 				)
+// 			);
+// 			const unsolvedIssuesData = currentEmpIssues.filter((issue) =>
+// 				statusData.some(
+// 					(status) =>
+// 						status.issueId === issue.issueId && status.status !== "closed"
+// 				)
+// 			);
+
+// 			setSolvedIssues(solvedIssuesData);
+// 			setUnsolvedIssues(unsolvedIssuesData);
+// 			setTempIssues(currentEmpIssues);
+// 		};
+
+// 		fetchData();
+// 	}, []);
+
+// 	const handleAllIssues = () => {
+// 		setTempIssues(currentEmpIssues);
+// 		console.log("All Issues Clicked");
+// 	};
+
+// 	const handleSolvedIssues = () => {
+// 		setTempIssues(solvedIssues);
+// 		console.log("Solved Issues Clicked");
+// 	};
+
+// 	const handleUnsolvedIssues = () => {
+// 		setTempIssues(unsolvedIssues);
+// 		console.log("Unsolved Issues Clicked");
+// 	};
+
+// 	return (
+// 		<>
+// 			<EmpNavbar
+// 				handleAllIssues={handleAllIssues}
+// 				handleSolvedIssues={handleSolvedIssues}
+// 				handleUnsolvedIssues={handleUnsolvedIssues}
+// 			/>
+// 			<EmpIssues tempIssues={tempIssues} status={status} />
+// 		</>
+// 	);
+// };
+
+// export default Employee;
+
 import { useEffect, useState } from "react";
 // import "./App.css";
+import axios from "axios";
 import EmpNavbar from "./emp_navbar";
 import EmpIssues from "./issues";
+// const Employee = () => {
+// 	const [currentEmpIssues, setCurrentEmpIssues] = useState([]);
+// 	const [solvedIssues, setSolvedIssues] = useState([]);
+// 	const [unsolvedIssues, setUnsolvedIssues] = useState([]);
+// 	const [tempIssues, setTempIssues] = useState([]);
+// 	const [status, setStatus] = useState([]);
+// 	// const [empId, setEmpId] = useState(localStorage.getItem("empId"));
+// 	const [empId, setEmpId] = useState("1");
+
+// 	useEffect(() => {
+// 		const fetchData = async () => {
+// 			let statusData = [];
+// 			let currentIssueData = [];
+
+// 			// try {
+// 			// 	const statusResponse = await axios.get(
+// 			// 		"http://localhost:2000/api/status"
+// 			// 	);
+// 			// 	statusData = statusResponse.data;
+
+// 			// 	const issuesResponse = await axios.get(
+// 			// 		`http://localhost:2000/api/issues/employee/${empId}`
+// 			// 	);
+// 			// 	currentIssueData = issuesResponse.data;
+// 			// } catch (error) {
+// 			// 	console.error(error);
+// 			// }
+// 			statusData = [
+// 				{
+// 					statusId: "123",
+// 					status: "closed",
+// 					issueId: "1",
+// 					statusDescription: "It may take 2 days",
+// 				},
+// 				{
+// 					statusId: "124",
+// 					status: "open",
+// 					issueId: "2",
+// 					statusDescription: "It may take 5 days",
+// 				},
+// 			];
+
+// 			currentIssueData = [
+// 				{
+// 					issueId: "1",
+// 					issueName: "Delivery",
+// 					issueDesc: "Got wrong item",
+// 					connectedTo: "1234",
+// 					status: "123",
+// 				},
+// 				{
+// 					issueId: "2",
+// 					issueName: "Payment",
+// 					issueDesc: "Payment failed",
+// 					connectedTo: "1254",
+// 					status: "124",
+// 				},
+// 			];
+
+// 			setCurrentEmpIssues(currentIssueData);
+// 			setStatus(statusData);
+
+// 			const solvedIssuesData = currentIssueData.filter((issue) =>
+// 				statusData.some(
+// 					(status) =>
+// 						status.issueId === issue.issueId && status.status === "closed"
+// 				)
+// 			);
+// 			const unsolvedIssuesData = currentIssueData.filter((issue) =>
+// 				statusData.some(
+// 					(status) =>
+// 						status.issueId === issue.issueId && status.status !== "closed"
+// 				)
+// 			);
+
+// 			setSolvedIssues(solvedIssuesData);
+// 			setUnsolvedIssues(unsolvedIssuesData);
+// 			setTempIssues(currentEmpIssues);
+// 		};
+
+// 		// if (empId) {
+// 		fetchData();
+// 		console.log(currentEmpIssues);
+// 		console.log(status);
+// 		// }
+// 	}, []);
+
+// 	const handleAllIssues = () => {
+// 		setTempIssues(currentEmpIssues);
+// 		console.log("All Issues Clicked");
+// 	};
+
+// 	const handleSolvedIssues = () => {
+// 		setTempIssues(solvedIssues);
+// 		console.log("Solved Issues Clicked");
+// 	};
+
+// 	const handleUnsolvedIssues = () => {
+// 		setTempIssues(unsolvedIssues);
+// 		console.log("Unsolved Issues Clicked");
+// 	};
+
+// 	return (
+// 		<>
+// 			<EmpNavbar
+// 				handleAllIssues={handleAllIssues}
+// 				handleSolvedIssues={handleSolvedIssues}
+// 				handleUnsolvedIssues={handleUnsolvedIssues}
+// 			/>
+// 			<EmpIssues tempIssues={tempIssues} status={status} />
+// 		</>
+// 	);
+// };
+
+// export default Employee;
 
 const Employee = () => {
-	const [issues, setIssues] = useState([]);
+	const [currentEmpIssues, setCurrentEmpIssues] = useState([]);
 	const [solvedIssues, setSolvedIssues] = useState([]);
 	const [unsolvedIssues, setUnsolvedIssues] = useState([]);
 	const [tempIssues, setTempIssues] = useState([]);
 	const [status, setStatus] = useState([]);
+	// const [empId, setEmpId] = useState(localStorage.getItem("empId"));
+	const [empId, setEmpId] = useState("211"); // assuming empId is set to "1" for testing
 
 	useEffect(() => {
 		const fetchData = async () => {
-			// await axios
-			// 	.get("http://localhost:2000/api/issues")
-			// 	.then((res) => {
-			// 		return setIssues(res.data);
-			// 	})
-			// 	.catch((e) => console.log(e));
-			// await axios
-			// 	.get("http://localhost:2000/api/status")
-			// 	.then((res) => {
-			// 		return setStatus(res.data);
-			// 	})
-			// .catch((e) => console.log(e));
-			const issuesData = [
-				{
-					issueId: "1",
-					issueName: "Delivery",
-					issueDesc: "Got wrong item",
-					connectedTo: "1234",
-					status: "123",
-				},
-				{
-					issueId: "2",
-					issueName: "Payment",
-					issueDesc: "Payment failed",
-					connectedTo: "1254",
-					status: "124",
-				},
-			];
+			let statusData = [];
+			let currentIssueData = [];
 
-			const statusData = [
-				{
-					statusId: "123",
-					status: "closed",
-					issueId: "1",
-					statusDescription: "It may take 2 days",
-				},
-				{
-					statusId: "124",
-					status: "open",
-					issueId: "2",
-					statusDescription: "It may take 5 days",
-				},
-			];
+			// Simulating API calls
+			try {
+				const statusResponse = await axios.get(
+					"http://localhost:2000/api/status"
+				);
+				statusData = statusResponse.data;
+				console.log(statusData);
 
-			setIssues(issuesData);
+				const issuesResponse = await axios.get(
+					`http://localhost:2000/api/issues/employee/${empId}`
+				);
+				currentIssueData = issuesResponse.data;
+			} catch (error) {
+				console.error(error);
+			}
+
+			// Mock data for testing
+			// statusData = [
+			// 	{
+			// 		statusId: "123",
+			// 		status: "closed",
+			// 		issueId: "1",
+			// 		statusDescription: "It may take 2 days",
+			// 	},
+			// 	{
+			// 		statusId: "124",
+			// 		status: "open",
+			// 		issueId: "2",
+			// 		statusDescription: "It may take 5 days",
+			// 	},
+			// ];
+
+			// currentIssueData = [
+			// 	{
+			// 		issueId: "1",
+			// 		issueName: "Delivery",
+			// 		issueDesc: "Got wrong item",
+			// 		connectedTo: "1234",
+			// 		status: "123",
+			// 	},
+			// 	{
+			// 		issueId: "2",
+			// 		issueName: "Payment",
+			// 		issueDesc: "Payment failed",
+			// 		connectedTo: "1254",
+			// 		status: "124",
+			// 	},
+			// ];
+
+			setCurrentEmpIssues(currentIssueData);
 			setStatus(statusData);
 
-			const solvedIssuesData = issuesData.filter((issue) =>
+			const solvedIssuesData = currentIssueData.filter((issue) =>
 				statusData.some(
 					(status) =>
 						status.issueId === issue.issueId && status.status === "closed"
 				)
 			);
-			const unsolvedIssuesData = issuesData.filter((issue) =>
+			const unsolvedIssuesData = currentIssueData.filter((issue) =>
 				statusData.some(
 					(status) =>
 						status.issueId === issue.issueId && status.status !== "closed"
@@ -224,14 +474,14 @@ const Employee = () => {
 
 			setSolvedIssues(solvedIssuesData);
 			setUnsolvedIssues(unsolvedIssuesData);
-			setTempIssues(issuesData);
+			setTempIssues(currentIssueData);
 		};
 
 		fetchData();
-	}, []);
+	}, [empId]);
 
 	const handleAllIssues = () => {
-		setTempIssues(issues);
+		setTempIssues(currentEmpIssues);
 		console.log("All Issues Clicked");
 	};
 
